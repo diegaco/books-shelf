@@ -59,6 +59,32 @@ app.post('/api/book', (req, res) => {
 })
 
 
+// UPDATE
+
+app.put('/api/book/:id', (req, res) => {
+  const { id } = req.params;
+  Book.findOneAndUpdate(id, req.body, { new: true }, (err, doc) => {
+    if (err) return res.status(400).send(err);
+    res.status(200).send({
+      success: true,
+      data: doc
+    })
+  })
+})
+
+
+// DELETE
+
+app.delete('/api/book/:id', (req, res) => {
+  const { id } = req.params;
+  Book.findOneAndDelete({ "_id": id }, (err, doc) => {
+    if (err) return res.status(400).send(err);
+    res.status(200).send({status: "ok", data: doc})
+  })
+})
+
+
+
 
 app.listen(PORT, () => {
   console.log('Server is running');
