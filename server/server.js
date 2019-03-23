@@ -7,7 +7,7 @@ const { auth } = require('./middleware/auth');
 const { User } = require('./models/user');
 const { Book } = require('./models/book');
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 mongoose.Promise = global.Promise;
 mongoose.connect(config.DB);
