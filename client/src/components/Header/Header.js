@@ -37,7 +37,7 @@ export default class Header extends Component {
 
         <SideNavbar
           showNav={this.state.showNav}
-          hideNav={this.hideNav}
+          onHideNav={this.hideNav}
         />
 
         <Link to="/" className="logo">
