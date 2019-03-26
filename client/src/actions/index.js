@@ -17,3 +17,29 @@ export function getBooks(
     payload: req
   }
 }
+
+export function getBookWithReviewer(id) {
+  const req = fetch(`/api/book/${id}`)
+
+  // Redux Thunk
+  return (dispatch) => {
+    req
+      .then(res => res.json())
+      .then(json => {
+        let book = json.data;
+
+        fetch(`/api/user/${book.ownerId}`)
+          .then(res => res.json())
+          .then(json => {
+            let response = {
+              book,
+              reviewer: json
+            };
+            dispatch({
+              type: 'GET_BOOK_WITH_REVIEWER',
+              payload: response
+            })
+          });
+      })
+  }
+}
