@@ -1,3 +1,6 @@
+
+/*-------------------- BOOKS --------------------*/
+
 export function getBooks(
   limit = 10,
   start = 0,
@@ -41,5 +44,26 @@ export function getBookWithReviewer(id) {
             })
           });
       })
+  }
+}
+
+export function clearBookWithReviewer() {
+  return {
+    type: 'CLEAR_BOOK_WITH_REVIEWER',
+    payload: {
+      book: {},
+      reviewer: {}
+    }
+  }
+}
+
+
+
+/*-------------------- USER --------------------*/
+
+export function loginUser() {
+  return {
+    type: 'USER_LOGIN',
+    payload: null
   }
 }
