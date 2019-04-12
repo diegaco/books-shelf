@@ -86,7 +86,7 @@ app.post('/api/login', (req, res) => {
 
   User.findOne({'email': req.body.email}, (err, user)=> {
     if (err) return res.status(401).send({ isAuth: false, message: err });
-    if (!user) return res.status(401).send({ isAuth: false, message: 'Auth faild' });
+    if (!user) return res.status(401).send({ isAuth: false, message: 'Auth faild, User not found' });
 
     user.comparePassword(password, (err, isMatch) => {
       if (!isMatch) return res.status(401).send({

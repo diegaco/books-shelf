@@ -61,9 +61,19 @@ export function clearBookWithReviewer() {
 
 /*-------------------- USER --------------------*/
 
-export function loginUser() {
+export function loginUser({email, password}) {
+  const req = fetch('/api/login', {
+    method: 'POST',
+    body: JSON.stringify({ email: email.value, password: password.value }),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(res => res.json())
+  .then(json => json);
+
   return {
     type: 'USER_LOGIN',
-    payload: null
+    payload: req
   }
 }
