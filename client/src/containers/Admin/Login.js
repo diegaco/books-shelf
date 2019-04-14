@@ -122,7 +122,6 @@ class Login extends Component {
     }
   }
 
-
   render() {
     const { user } = this.props;
     return (
@@ -145,7 +144,9 @@ class Login extends Component {
           </div>
           {this.submitButton()}
           {
-            user.login ? ( <div className="error">{user.login.message}</div>) : null
+            user.login ?
+              (<div className="error">{user.login.message}</div>) :
+              null
           }
         </form>
       </div>

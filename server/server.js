@@ -112,8 +112,9 @@ app.get('/api/private', auth, (req, res) => {
   res.send({
     isAuth: true,
     id: req.user._id,
-    email: req.user.name,
-    lastname: req.user.lastname
+    name: req.user.name,
+    lastname: req.user.lastname,
+    email: req.user.email
   })
 })
 

@@ -32,6 +32,43 @@ const FormFields = ({formData, handleChange,id}) => {
           </div>
         );
         break;
+      case 'select':
+        formTemplate = (
+          <div>
+            <select
+              {...formData.config}
+              value={formData.value}
+              onBlur={event=> handleChange({event, id, blur: true})}
+              onChange={event => handleChange({event, id, blur: false})}
+            >
+              {
+                formData.options.map(( opt, i ) => (
+                  <option
+                    val={opt[0]}
+                    key={i}
+                  >
+                    {opt[1]}
+                  </option>
+                ))
+              }
+            </select>
+            {showError()}
+          </div>
+        );
+        break;
+      case 'textarea':
+        formTemplate = (
+          <div>
+            <textarea
+              {...formData.config}
+              value={formData.value}
+              onBlur={event=> handleChange({event, id, blur: true})}
+              onChange={event => handleChange({event, id, blur: false})}
+            />
+            {showError()}
+          </div>
+        );
+        break;
       default:
         formTemplate = null;
     }

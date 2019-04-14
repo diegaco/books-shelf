@@ -10,9 +10,10 @@ export function getBooks(
   // const req = `/api/books?limit=${limit}&skip=${start}&order=${order}`;
   const req = fetch(`/api/books?limit=${limit}&skip=${start}&order=${order}`)
     .then(res => res.json())
-    .then(json => (
-      list ? [...list, ...json.data] : json.data
-    ))
+    .then(json => {
+      console.log(json);
+      return list ? [...list, ...json.data] : json.data
+  })
     .catch(err => err);
 
   return {
@@ -74,6 +75,17 @@ export function loginUser({email, password}) {
 
   return {
     type: 'USER_LOGIN',
+    payload: req
+  }
+}
+
+export function auth() {
+  const req = fetch('/api/private')
+    .then(res => res.json())
+    .then(json => json);
+
+  return {
+    type: 'USER_AUTH',
     payload: req
   }
 }
