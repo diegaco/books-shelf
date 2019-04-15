@@ -1,7 +1,11 @@
 import React, { Component } from 'react'
 import FormFields from '../../widgetsUI/FormFields';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { addBook, clearNewBook } from '../../actions';
+import { stat } from 'fs';
 
-export default class AddBook extends Component {
+class AddBook extends Component {
   state = {
     registerError: '',
     loading: false,
@@ -169,7 +173,25 @@ export default class AddBook extends Component {
 
   submitForm = (event) => {
     event.preventDefault();
-    console.log(this.state.formData);
+    this.props.dispatch(addBook({
+      ...this.state.formData,
+      ownerId: this.props.user.login.id
+    }));
+  }
+
+  showNewBook = (newBook) => (
+    newBook.success ?
+      <div className="conf_link">
+        New Book was added <br />
+        <Link to={`/books/${newBook.bookId}`}>
+          See the New Book
+        </Link>
+      </div> :
+      'no book'
+  );
+
+  componentWillUnmount() {
+    this.props.dispatch(clearNewBook());
   }
 
   render() {
@@ -220,8 +242,22 @@ export default class AddBook extends Component {
             />
           </div>
           { this.submitButton() }
+
+          {
+            this.props.book.newBook ?
+              this.showNewBook(this.props.book.newBook) :
+              null
+          }
         </form>
       </div>
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    book: state.books
+  }
+}
+
+export default connect(mapStateToProps)(AddBook);

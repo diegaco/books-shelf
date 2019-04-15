@@ -11,7 +11,6 @@ export function getBooks(
   const req = fetch(`/api/books?limit=${limit}&skip=${start}&order=${order}`)
     .then(res => res.json())
     .then(json => {
-      console.log(json);
       return list ? [...list, ...json.data] : json.data
   })
     .catch(err => err);
@@ -58,6 +57,37 @@ export function clearBookWithReviewer() {
   }
 }
 
+export function addBook({name, author, review, pages, rating, price, ownerId}) {
+  const req = fetch('/api/book', {
+    method: 'POST',
+    body: JSON.stringify({
+      name: name.value,
+      author: author.value,
+      review: review.value,
+      pages: pages.value,
+      rating: rating.value,
+      price: price.value,
+      ownerId
+    }),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(res => res.json())
+  .then(json => json)
+
+  return {
+    type: 'ADD_BOOK',
+    payload: req
+  }
+}
+
+export function clearNewBook() {
+  return {
+    type: 'CLEAR_NEW_BOOK',
+    payload: {}
+  }
+}
 
 
 /*-------------------- USER --------------------*/
