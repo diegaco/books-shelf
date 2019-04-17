@@ -1,31 +1,25 @@
-
 /*-------------------- BOOKS --------------------*/
 
-export function getBooks(
-  limit = 10,
-  start = 0,
-  order = 'asc',
-  list = ''
-) {
+export function getBooks(limit = 10, start = 0, order = 'asc', list = '') {
   // const req = `/api/books?limit=${limit}&skip=${start}&order=${order}`;
   const req = fetch(`/api/books?limit=${limit}&skip=${start}&order=${order}`)
     .then(res => res.json())
     .then(json => {
-      return list ? [...list, ...json.data] : json.data
-  })
+      return list ? [...list, ...json.data] : json.data;
+    })
     .catch(err => err);
 
   return {
     type: 'GET_BOOKS',
-    payload: req
-  }
+    payload: req,
+  };
 }
 
 export function getBookWithReviewer(id) {
-  const req = fetch(`/api/book/${id}`)
+  const req = fetch(`/api/book/${id}`);
 
   // Redux Thunk
-  return (dispatch) => {
+  return dispatch => {
     req
       .then(res => res.json())
       .then(json => {
@@ -36,15 +30,15 @@ export function getBookWithReviewer(id) {
           .then(json => {
             let response = {
               book,
-              reviewer: json
+              reviewer: json,
             };
             dispatch({
               type: 'GET_BOOK_WITH_REVIEWER',
-              payload: response
-            })
+              payload: response,
+            });
           });
-      })
-  }
+      });
+  };
 }
 
 export function clearBookWithReviewer() {
@@ -52,9 +46,9 @@ export function clearBookWithReviewer() {
     type: 'CLEAR_BOOK_WITH_REVIEWER',
     payload: {
       book: {},
-      reviewer: {}
-    }
-  }
+      reviewer: {},
+    },
+  };
 }
 
 export function addBook({name, author, review, pages, rating, price, ownerId}) {
@@ -67,46 +61,72 @@ export function addBook({name, author, review, pages, rating, price, ownerId}) {
       pages: pages.value,
       rating: rating.value,
       price: price.value,
-      ownerId
+      ownerId,
     }),
     headers: {
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   })
-  .then(res => res.json())
-  .then(json => json)
+    .then(res => res.json())
+    .then(json => json);
 
   return {
     type: 'ADD_BOOK',
-    payload: req
-  }
+    payload: req,
+  };
 }
 
 export function clearNewBook() {
   return {
     type: 'CLEAR_NEW_BOOK',
-    payload: {}
-  }
+    payload: {},
+  };
 }
 
+export function getBook(id) {
+  const req = fetch(`/api/book/${id}`)
+    .then(res => res.json())
+    .then(json => json.data);
+
+  return {
+    type: 'GET_BOOK',
+    payload: req,
+  };
+}
+
+export function updateBook(data) {
+  const req = fetch(`/api/book/${data._id}`, {
+    method: 'POST',
+    body: JSON.stringify(data),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then(res => res.json())
+    .then(json => json.data);
+  return {
+    type: 'UPDATE_BOOK',
+    payload: req,
+  };
+}
 
 /*-------------------- USER --------------------*/
 
 export function loginUser({email, password}) {
   const req = fetch('/api/login', {
     method: 'POST',
-    body: JSON.stringify({ email: email.value, password: password.value }),
+    body: JSON.stringify({email: email.value, password: password.value}),
     headers: {
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   })
-  .then(res => res.json())
-  .then(json => json);
+    .then(res => res.json())
+    .then(json => json);
 
   return {
     type: 'USER_LOGIN',
-    payload: req
-  }
+    payload: req,
+  };
 }
 
 export function auth() {
@@ -116,6 +136,17 @@ export function auth() {
 
   return {
     type: 'USER_AUTH',
-    payload: req
-  }
+    payload: req,
+  };
+}
+
+export function getUserPosts(userId) {
+  const req = fetch(`/api/books?user=${userId}`)
+    .then(res => res.json())
+    .then(json => json.data);
+
+  return {
+    type: 'GET_USER_POSTS',
+    payload: req,
+  };
 }

@@ -1,15 +1,16 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import FormFields from '../../widgetsUI/FormFields';
 import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
-import {addBook, clearNewBook} from '../../actions';
-import {stat} from 'fs';
+import {getBook, updateBook, clearBook, deletePost} from '../../actions';
 
-class AddBook extends Component {
+class EditBook extends PureComponent {
   state = {
     registerError: '',
+    book: this.props.books.book,
     loading: false,
     formData: {
+      _id: this.props.match.params.id,
       name: {
         element: 'input',
         value: '',
@@ -160,39 +161,51 @@ class AddBook extends Component {
       'loading'
     ) : (
       <div>
-        <button type="submit">Add a Review</button>
+        <button type="submit">Edit a Review</button>
+        <div className="delete_post">
+          <button className="button">Delete review</button>
+        </div>
       </div>
     );
 
   submitForm = event => {
     event.preventDefault();
-    this.props.dispatch(
-      addBook({
-        ...this.state.formData,
-        ownerId: this.props.user.login.id,
-      }),
-    );
   };
 
-  showNewBook = newBook =>
-    newBook.success ? (
-      <div className="conf_link">
-        New Book was added <br />
-        <Link to={`/books/${newBook.bookId}`}>See the New Book</Link>
-      </div>
-    ) : (
-      'no book'
-    );
+  componentDidMount() {
+    const {id: bookId} = this.props.match.params;
+    this.props.dispatch(getBook(bookId));
+  }
 
-  componentWillUnmount() {
-    this.props.dispatch(clearNewBook());
+  static getDerivedStateFromProps(nextProps, state) {
+    const {book} = nextProps.books;
+    let newFormData = {...state.formData};
+
+    if (book && book !== state.book) {
+      for (const prop in book) {
+        if (newFormData[prop] && prop != '_id') {
+          const newElement = {
+            ...newFormData[prop],
+          };
+          newElement.value = book[prop];
+          newFormData[prop] = newElement;
+        }
+      }
+
+      return {
+        book,
+        formData: newFormData,
+      };
+    } else {
+      return null;
+    }
   }
 
   render() {
     return (
       <div className="rl_container article">
         <form onSubmit={this.submitForm}>
-          <h2>Add a Review</h2>
+          <h2>Edit a Review</h2>
           <div className="form_element">
             <FormFields
               id="name"
@@ -236,10 +249,6 @@ class AddBook extends Component {
             />
           </div>
           {this.submitButton()}
-
-          {this.props.book.newBook
-            ? this.showNewBook(this.props.book.newBook)
-            : null}
         </form>
       </div>
     );
@@ -248,8 +257,8 @@ class AddBook extends Component {
 
 const mapStateToProps = state => {
   return {
-    book: state.books,
+    books: state.books,
   };
 };
 
-export default connect(mapStateToProps)(AddBook);
+export default connect(mapStateToProps)(EditBook);
