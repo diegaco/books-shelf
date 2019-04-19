@@ -147,7 +147,7 @@ app.get('/api/users', (req, res) => {
 
 app.put('/api/book/:id', (req, res) => {
   const {id} = req.params;
-  Book.findOneAndUpdate(id, req.body, {new: true}, (err, doc) => {
+  Book.findOneAndUpdate({_id: id}, req.body, {new: true}, (err, doc) => {
     if (err) return res.status(400).send(err);
     res.status(200).send({
       success: true,

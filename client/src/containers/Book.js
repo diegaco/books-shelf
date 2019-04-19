@@ -1,9 +1,8 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux';
-import { getBookWithReviewer, clearBookWithReviewer } from '../actions'
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {getBookWithReviewer, clearBookWithReviewer} from '../actions';
 
 class Book extends Component {
-
   componentDidMount() {
     this.props.dispatch(getBookWithReviewer(this.props.match.params.id));
   }
@@ -12,8 +11,8 @@ class Book extends Component {
     this.props.dispatch(clearBookWithReviewer());
   }
 
-  renderBook = ({ book, reviewer }) => (
-    book ?
+  renderBook = ({book, reviewer}) =>
+    book ? (
       <div className="br_container">
         <div className="br_header">
           <h2>{book.name}</h2>
@@ -22,9 +21,7 @@ class Book extends Component {
             <span>Review by: </span> {reviewer.name} {reviewer.lastname}
           </div>
         </div>
-        <div className="br_review">
-          {book.review}
-        </div>
+        <div className="br_review">{book.review}</div>
         <div className="br_box">
           <div className="left">
             <div className="">
@@ -40,24 +37,18 @@ class Book extends Component {
           </div>
         </div>
       </div>
-    :
-    null
-  );
+    ) : null;
 
   render() {
-    let { books } = this.props;
-    return (
-      <div>
-        {this.renderBook(books)}
-      </div>
-    )
+    let {books} = this.props;
+    return <div>{this.renderBook(books)}</div>;
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
-    books: state.books
-  }
+    books: state.books,
+  };
 };
 
 export default connect(mapStateToProps)(Book);

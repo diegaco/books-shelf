@@ -156,6 +156,12 @@ class EditBook extends PureComponent {
     return error;
   };
 
+  deleteBook = ev => {
+    ev.preventDefault();
+    const {id: bookId} = this.props.match.params;
+    this.props.dispatch(deletePost(bookId));
+  };
+
   submitButton = () =>
     this.state.loading ? (
       'loading'
@@ -163,13 +169,25 @@ class EditBook extends PureComponent {
       <div>
         <button type="submit">Edit a Review</button>
         <div className="delete_post">
-          <button className="button">Delete review</button>
+          <button className="button" onClick={this.deleteBook}>
+            Delete review
+          </button>
         </div>
       </div>
     );
 
   submitForm = event => {
     event.preventDefault();
+    const bookData = {};
+    const {id: bookId} = this.props.match.params;
+
+    for (const prop in this.state.formData) {
+      if (prop !== '_id') {
+        bookData[prop] = this.state.formData[prop].value;
+      }
+    }
+
+    this.props.dispatch(updateBook(bookId, bookData));
   };
 
   componentDidMount() {
@@ -181,9 +199,11 @@ class EditBook extends PureComponent {
     const {book} = nextProps.books;
     let newFormData = {...state.formData};
 
+    // first time we receive book from DB
+    // and fill the form with DB info
     if (book && book !== state.book) {
       for (const prop in book) {
-        if (newFormData[prop] && prop != '_id') {
+        if (newFormData[prop] && prop !== '_id') {
           const newElement = {
             ...newFormData[prop],
           };
@@ -201,9 +221,33 @@ class EditBook extends PureComponent {
     }
   }
 
+  redirectUser = () => {
+    setTimeout(() => {
+      this.props.history.push('/user/user-reviews');
+    }, 1000);
+  };
+
+  componentWillUnmount() {
+    this.props.dispatch(clearBook());
+  }
+
   render() {
     return (
       <div className="rl_container article">
+        {this.props.books.updatedBook ? (
+          <div className="edit_confirm">
+            Post was updated, &nbsp;
+            <Link to={`/books/${this.props.books.newBook._id}`}>
+              Click here to see the post
+            </Link>
+          </div>
+        ) : null}
+        {this.props.books.deletedBook ? (
+          <div className="red_tag">
+            Post Deleted
+            {this.redirectUser()}
+          </div>
+        ) : null}
         <form onSubmit={this.submitForm}>
           <h2>Edit a Review</h2>
           <div className="form_element">

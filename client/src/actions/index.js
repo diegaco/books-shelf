@@ -94,19 +94,44 @@ export function getBook(id) {
   };
 }
 
-export function updateBook(data) {
-  const req = fetch(`/api/book/${data._id}`, {
-    method: 'POST',
-    body: JSON.stringify(data),
+export function updateBook(id, bookData) {
+  const req = fetch(`/api/book/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(bookData),
     headers: {
       'Content-Type': 'application/json',
     },
   })
     .then(res => res.json())
-    .then(json => json.data);
+    .then(json => json);
   return {
     type: 'UPDATE_BOOK',
     payload: req,
+  };
+}
+
+export function deletePost(id) {
+  const req = fetch(`/api/book/${id}`, {
+    method: 'DELETE',
+  })
+    .then(res => res.json())
+    .then(json => json);
+
+  return {
+    type: 'DELETE_BOOK',
+    payload: req,
+  };
+}
+
+export function clearBook() {
+  return {
+    type: 'CLEAR_BOOK',
+    payload: {
+      book: {},
+      newBook: {},
+      updatedBook: false,
+      deletedBook: false,
+    },
   };
 }
 
