@@ -3,7 +3,6 @@ import FormFields from '../../widgetsUI/FormFields';
 import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
 import {addBook, clearNewBook} from '../../actions';
-import {stat} from 'fs';
 
 class AddBook extends Component {
   state = {
