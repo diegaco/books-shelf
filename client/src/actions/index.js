@@ -165,6 +165,17 @@ export function auth() {
   };
 }
 
+export function getUsers() {
+  const req = fetch('/api/users')
+    .then(res => res.json())
+    .then(json => json.data)
+
+  return {
+    type: 'GET_USERS',
+    payload: req
+  }
+}
+
 export function getUserPosts(userId) {
   const req = fetch(`/api/books?user=${userId}`)
     .then(res => res.json())
