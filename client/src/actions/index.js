@@ -186,3 +186,35 @@ export function getUserPosts(userId) {
     payload: req,
   };
 }
+
+export function registerUser({name, lastname, email, password}, userList = '') {
+  const req = fetch(`/api/register`, {
+    method: 'POST',
+    body: JSON.stringify({
+      name: name.value,
+      lastname: lastname.value,
+      email: email.value,
+      password: password.value
+    }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+
+  return dispatch => {
+    req
+      .then(res => res.json())
+      .then(({ success, data }) => {
+        let response = {
+          success,
+          users: [...userList, data]
+        };
+
+        dispatch({
+          type: 'REGISTER_USER',
+          payload: response
+        })
+
+      })
+  }
+}

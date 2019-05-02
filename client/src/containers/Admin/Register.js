@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
-import { FormFields } from '../../widgetsUI/FormFields';
-import { getUsers } from '../../actions';
+import FormFields from '../../widgetsUI/FormFields';
+import { getUsers, registerUser } from '../../actions';
 
 class Register extends Component {
 
@@ -24,7 +24,7 @@ class Register extends Component {
         touched: false,
         validationMessage: '',
       },
-      lastName: {
+      lastname: {
         element: 'input',
         value: '',
         validation: {
@@ -105,10 +105,11 @@ class Register extends Component {
   };
 
   validate = (element) => {
+    console.log(element);
     let error = [true, ''];
 
     // validate email
-    if (element.validation.email) {
+      if (element.validation.email) {
       const valid = /\S+@\S+\.\S+/.test(element.value);
       const msg = `${!valid ? "Must enter a valid email" : ""}`;
       error = !valid ? [valid, msg] : error;
@@ -132,6 +133,10 @@ class Register extends Component {
 
   submitForm = (ev) => {
     ev.preventDefault();
+    this.setState({
+      registerError: ''
+    });
+    this.props.dispatch(registerUser(this.state.formData, this.props.user.users));
   };
 
   renderUsers = () => {
@@ -146,11 +151,55 @@ class Register extends Component {
       null
   }
 
+  submitButton = () => (
+    this.state.loading
+      ? "loading"
+      : <div>
+        <button type="submit">
+          Register User
+        </button>
+      </div>
+  );
+
   render() {
+    console.log(this.props.user);
     return (
       <div className="rl_container">
         <form action="" onSubmit={this.submitForm}>
           <h2>Add user</h2>
+          <div className="form_element">
+            <FormFields
+              id="name"
+              formData={this.state.formData.name}
+              handleChange={element => this.handleFormChange(element)}
+            />
+          </div>
+          <div className="form_element">
+            <FormFields
+              id="lastname"
+              formData={this.state.formData.lastname}
+              handleChange={element => this.handleFormChange(element)}
+            />
+          </div>
+          <div className="form_element">
+            <FormFields
+              id="email"
+              formData={this.state.formData.email}
+              handleChange={element => this.handleFormChange(element)}
+            />
+          </div>
+          <div className="form_element">
+            <FormFields
+              id="password"
+              formData={this.state.formData.password}
+              handleChange={element => this.handleFormChange(element)}
+            />
+          </div>
+
+          {this.submitButton()}
+          {
+              <div className="error">{this.state.registerError}</div>
+          }
         </form>
         <div className="current_users">
           <h4>Current Users:</h4>
