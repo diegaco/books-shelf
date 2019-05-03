@@ -10,6 +10,8 @@ import AddBook from './containers/Admin/AddBook';
 import UserPosts from './components/Admin/UserPosts';
 import EditBook from './containers/Admin/EditBook';
 import Register from './containers/Admin/Register';
+import Logout from './containers/Admin/Logout'
+
 
 const Routes = () => {
   return (
@@ -18,6 +20,7 @@ const Routes = () => {
         <Route path="/" exact component={Auth(Home, null)} />
         <Route path="/login" exact component={Auth(Login, false)} />
         <Route path="/user" exact component={Auth(User, true)} />
+        <Route path="/user/logout" exact component={Auth(Logout, true)} />
         <Route path="/user/add" exact component={Auth(AddBook, true)} />
         <Route path="/user/register" exact component={Auth(Register, true)} />
         <Route

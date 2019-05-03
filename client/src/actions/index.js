@@ -165,6 +165,17 @@ export function auth() {
   };
 }
 
+export function logout() {
+  const req = fetch('/api/logout')
+    .then(res => res.json())
+    .then(json => json.status);
+
+  return {
+    type: 'USER_LOGOUT',
+    payload: req,
+  };
+}
+
 export function getUsers() {
   const req = fetch('/api/users')
     .then(res => res.json())

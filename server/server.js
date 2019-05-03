@@ -125,7 +125,10 @@ app.get('/api/private', auth, (req, res) => {
 
 app.get('/api/logout', auth, (req, res) => {
   req.user.deleteToken(req.token, (err, user) => {
-    if (err) return res.status(400).send(err);
+    if (err) return res.status(400).send({
+      status: 'error',
+      err
+    });
     res.status(200).send({status: 'logout'});
   });
 });

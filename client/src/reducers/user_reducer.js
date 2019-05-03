@@ -5,6 +5,11 @@ export default function(state = {}, action) {
         ...state,
         login: action.payload,
       };
+    case 'USER_LOGOUT':
+      return {
+        ...state,
+        login: action.payload,
+      };
     case 'USER_AUTH':
       return {
         ...state,
