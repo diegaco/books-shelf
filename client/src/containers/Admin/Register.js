@@ -1,12 +1,13 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import { connect } from 'react-redux';
 import FormFields from '../../widgetsUI/FormFields';
 import { getUsers, registerUser } from '../../actions';
 
-class Register extends Component {
+class Register extends PureComponent {
 
   state = {
     registerError: '',
+    register: '',
     loading: false,
     formData: {
       name: {
@@ -74,6 +75,39 @@ class Register extends Component {
     },
   };
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+    let newFormData = {...prevState.formData};
+    if (
+      nextProps.user.register &&
+      nextProps.user.register === true &&
+      prevState.register !== true
+    ) {
+      for (const prop in newFormData) {
+        if (newFormData[prop]) {
+          const newElement = {
+            ...newFormData[prop],
+          };
+          newElement.value = '';
+          newFormData[prop] = newElement;
+        }
+      }
+
+      return {
+        registerError: '',
+        register: nextProps.user.register,
+        loading: false,
+        formData: newFormData
+      }
+    } else if (nextProps.user.register === false) {
+      return {
+        registerError: 'There was an error. Try again'
+      };
+    } else {
+      return null;
+    }
+  }
+
+
   componentDidMount() {
     this.props.dispatch(getUsers());
   }
@@ -105,7 +139,6 @@ class Register extends Component {
   };
 
   validate = (element) => {
-    console.log(element);
     let error = [true, ''];
 
     // validate email
@@ -140,14 +173,16 @@ class Register extends Component {
   };
 
   renderUsers = () => {
+    console.log(this.props.user);
     return this.props.user.users ?
-      this.props.user.users.map(user => (
+      this.props.user.users.map(user => user !== undefined ? (
         <tr key={user._id}>
           <td>{user.name}</td>
           <td>{user.lastname}</td>
           <td>{user.email}</td>
         </tr>
-      )) :
+      ) :
+      null) :
       null
   }
 
@@ -162,7 +197,6 @@ class Register extends Component {
   );
 
   render() {
-    console.log(this.props.user);
     return (
       <div className="rl_container">
         <form action="" onSubmit={this.submitForm}>

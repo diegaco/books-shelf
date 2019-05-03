@@ -67,7 +67,10 @@ app.post('/api/book', (req, res) => {
 app.post('/api/register', (req, res) => {
   const user = new User(req.body);
   user.save((err, doc) => {
-    if (err) return res.status(400).send(err);
+    if (err) return res.status(400).send({
+      success: false,
+      err
+    });
     res.status(200).send({
       success: true,
       data: doc,

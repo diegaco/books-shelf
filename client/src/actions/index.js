@@ -207,7 +207,7 @@ export function registerUser({name, lastname, email, password}, userList = '') {
       .then(({ success, data }) => {
         let response = {
           success,
-          users: [...userList, data]
+          users: data !== undefined ? [...userList, data] : userList
         };
 
         dispatch({
