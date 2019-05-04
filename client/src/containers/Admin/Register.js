@@ -100,7 +100,8 @@ class Register extends PureComponent {
       }
     } else if (nextProps.user.register === false) {
       return {
-        registerError: 'There was an error. Try again'
+        registerError: 'There was an error. Try again',
+        register: nextProps.user.register,
       };
     } else {
       return null;
@@ -174,6 +175,7 @@ class Register extends PureComponent {
 
   renderUsers = () => {
     console.log(this.props.user);
+    console.log(this.state);
     return this.props.user.users ?
       this.props.user.users.map(user => user !== undefined ? (
         <tr key={user._id}>
